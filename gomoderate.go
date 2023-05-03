@@ -1,3 +1,4 @@
+// See README for details: https://github.com/thepudds/gomoderate#readme
 package main
 
 import (
@@ -34,7 +35,7 @@ func goModerateMain() int {
 	localAuthFlags := []cli.Flag{
 		&cli.StringFlag{
 			Name:        "my-user",
-			Usage:       "Your Bluesky `handle` such as (e.g., @user1.bsky.social)",
+			Usage:       "Your Bluesky `handle` (e.g., @user1.bsky.social)",
 			Hidden:      true,
 			Destination: &localUser,
 		},
@@ -67,7 +68,7 @@ func goModerateMain() int {
 		Flags: []cli.Flag{ // these are considered 'global', and are specified before subcommands
 			&cli.StringFlag{
 				Name:        "my-user",
-				Usage:       "Your Bluesky `handle` such as (e.g., @user1.bsky.social)",
+				Usage:       "Your Bluesky `handle` (e.g., @user1.bsky.social)",
 				Destination: &globalUser,
 			},
 			&cli.StringFlag{
