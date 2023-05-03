@@ -9,14 +9,38 @@ gomoderate is a command-line utility that gives you more control over your Blues
 ## Features
 
 - Automatically mute users based on the block list of one or more accounts you trust.
-- Import lists of users to mute from files or trusted URLs.
+- Import lists of users to mute from trusted URLs or files.
 - Mute named users individually or in bulk.
 
-Also, all of that for **blocking** is coming soon (hopefully!).
+Also, those workflows will optionally allow **blocking** rather than muting soon (hopefully!).
 
 Note that on the Bluesky platform:
 - **Mutes are private** -- only you can see who you have muted (plus in theory the system admins)
 - **Blocks are public** -- anyone in the world could see your own block list, though the mobile apps and web apps don't yet show this info
+
+In some cases, an account wishing to maintain a lower profile might prefer muting to blocking at this point, but the main point is it is important to be aware that your block lists are public data.
+
+## Usage
+
+A simple example invocation that doesn't require authentication is asking who someone else has blocked:
+
+```bash
+gomoderate list blocks @thepudds.bsky.social
+```
+
+If you run that, you'll see [@thepudds.bsky.social](https://staging.bsky.app/profile/@thepudds.bsky.social) is blocking a single account -- [@berduck](https://staging.bsky.app/profile/berduck.deepfates.com), a chatty robot.
+
+In that example above, `list` and `blocks` are considered "commands". The general pattern for gomoderate commands is:
+
+```bash
+gomoderate [auth options] command subcommand [command options] [command arguments]
+```
+
+But it is likely best understood by example, so we have included several [concrete examples](https://github.com/thepudds/gomoderate#examples) below.
+
+**Many of the commands require authentication** (though not all do). Before you can modify anything via gomoderate, you should obtain an application key from the Bluesky web interface. 
+
+Go to [staging.bsky.app/settings/app-passwords](https://staging.bsky.app/settings/app-passwords) and create an application key. Your application key will look similar to `xj5s-fqo6-rtfm-lsrt`. (For brevity, we use `xyz` in the examples below).
 
 ## Installation
 
@@ -28,28 +52,15 @@ go install github.com/thepudds/gomoderate@latest
 
 That will download & compile the source code. By default, it will install to the `go/bin` directory in your home directory.
 
-One approach to execute the program is:
-* Open a terminal (`Mac Terminal` on macOS, `Command Prompt` on Windows, or your shell on Linux)
-* Type `cd go/bin` to change directories
-* Run a sample help command by typing `./gomoderate help` (macOS/Linux) or `gomoderate help` (Windows)
+One approach to run gomoderate is:
+1. Open a terminal (`Mac Terminal` on macOS, `Command Prompt` on Windows, or your shell on Linux).
+    * Unless you have a custom setup, a fresh terminal will start in your home directory.
+2. Type `cd go/bin` to change directories to the Go binaries directory.
+3. You can run gomoderate by typing:
+    * `./gomoderate` (MacOS, Linux)
+    * `gomoderate` (Windows)
 
 Alternatively, you can add `$HOME/go/bin` to your path.
-
-## Usage
-
-A simple example invocation that doesn't require authentication is asking who someone else has blocked:
-
-```bash
-gomoderate list blocks @user1.bsky.social
-```
-
-In that example, `list` and `blocks` are considered "commands". The general structure for gomoderate commands is:
-
-```bash
-gomoderate [auth options] command subcommand [command options] [command arguments]
-```
-
-Many (but not all) of the commands require authentication. Before using gomoderate, you should obtain an application key from the Bluesky web interface. Go to [https://staging.bsky.app/settings/app-passwords](https://staging.bsky.app/settings/app-passwords) and create an application key. Your application key will look similar to `xj5s-fqo6-rtfm-lsrt`. (For brevity, we use `xyz` in the examples below).
 
 ## Examples
 
@@ -69,17 +80,19 @@ Bulk muting of unpleasant accounts that were blocked by accounts you trust. Here
 gomoderate --my-user @me.bsky.social --app-key xyz mute from-user-blocks @trusted1.bsky.social @trusted2.bsky.social
 ```
 
-Mute users from a file or URL:
-
-```bash
-gomoderate --my-user @me.bsky.social --app-key xyz mute from-file users.txt
-```
+Mute users from a list available via a URL:
 
 ```bash
 gomoderate --my-user @me.bsky.social --app-key xyz mute from-url https://example.com/a-trusted-list-of-users-to-mute.txt
 ```
 
-### Block users (coming soon)
+Mute users from a file:
+
+```bash
+gomoderate --my-user @me.bsky.social --app-key xyz mute from-file users-list.txt
+```
+
+### Block users (soon)
 
 Block one or more specified users:
 
