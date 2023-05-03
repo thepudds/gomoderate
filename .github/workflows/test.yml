@@ -1,0 +1,33 @@
+# With thanks to:
+#    https://github.com/rogpeppe/go-internal/blob/master/.github/workflows/test.yml
+#    https://github.com/mvdan/github-actions-golang
+#    https://github.com/thepudds/fzgen
+
+on: [push, pull_request]
+name: Test
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: [1.20.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        # juggling $PATH is different in Windows PowerShell,
+        # so let's just use bash on Windows too.
+        shell: bash
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        stable: false
+        go-version: ${{ matrix.go-version }}
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Test (standalone)
+      run: |
+        go vet ./...
+        go test -v -run TestScripts/cli
+        go test -race -run TestScripts/cli

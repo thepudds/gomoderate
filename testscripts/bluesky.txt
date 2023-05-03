@@ -1,0 +1,55 @@
+
+# End-to-end tests using our app key.
+# This will currently fail when tested by people who are not @thepudds.
+
+# Sorry @nerdjpg, you are test muted.
+gomoderate --my-user thepudds.bsky.social --app-key $GOMODERATE_TEST_APPKEY list mutes
+stdout '@nerdjpg.com'
+
+gomoderate list mutes --my-user thepudds.bsky.social --app-key $GOMODERATE_TEST_APPKEY
+stdout '@nerdjpg.com'
+
+# Sorry @berduck, you are test blocked.
+# Note that list blocks does not require auth.
+gomoderate list blocks @thepudds.bsky.social
+stdout '^@berduck.deepfates.com$'
+# Check we still find @berdeck when @thepudds is the second arg.
+# TODO: hopefully @kenwhite doesn't also block @berduck, or this test will not be very useful.
+gomoderate list blocks @kenwhite.bsky.social @thepudds.bsky.social
+stdout '^@berduck.deepfates.com$'
+
+# Sorry @kenwhite, you are about to be test muted.
+# (We occasionally manually unmute to keep this test useful).
+gomoderate --my-user thepudds.bsky.social --app-key $GOMODERATE_TEST_APPKEY mute users @kenwhite.bsky.social
+stdout 'muted 1 users|all 1 users already muted'
+
+# TODO: add test for test mute from url
+
+# Mute everyone blocked by @kenwhite.
+gomoderate --my-user thepudds.bsky.social --app-key $GOMODERATE_TEST_APPKEY mute from-user-blocks @kenwhite.bsky.social
+stdout 'muted \d+ users|all \d+ users already muted'
+
+# Mute a set of users listed in a file.
+# Sorry @kenwhite, you are about to be test muted again.
+gomoderate --my-user thepudds.bsky.social --app-key $GOMODERATE_TEST_APPKEY mute from-file go-mod-users-to-mute-list.txt
+stdout 'all 1 users already muted'
+
+# Verify some formatting.
+# Let's assume @kenwhite will have more than one block as we test here.
+gomoderate list blocks --verbose @kenwhite.bsky.social
+! stdout 'users blocked by @kenwhite.bsky.social'
+! stdout '---------------------'
+stdout '^did[^ ]+[ ]@[^ ]+$'
+
+gomoderate list blocks --oneline @kenwhite.bsky.social
+stdout '^users blocked by @kenwhite.bsky.social:$'
+! stdout '---------------------'
+stdout '^@[^ ]+[ ]@[^ ]+'
+
+gomoderate list blocks @kenwhite.bsky.social
+stdout '^users blocked by @kenwhite.bsky.social$'
+stdout '---------------------'
+stdout '^@[^ ]+$'
+
+-- go-mod-users-to-mute-list.txt --
+did:plc:s6j27rxb3ic2rxw73ixgqv2p @kenwhite.bsky.social

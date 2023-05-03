@@ -1,0 +1,70 @@
+# Some basic tests of the CLI arguments and errors and whatnot.
+# These tests should in theory be valid without an app key.
+# For now, we also include a test at the end that requires a network, but not an app key.
+# You should be able to run just these tests in the repo root by doing:
+#   go test -run TestScripts/cli
+
+# Confirm we get help when no args are supplied or with a help flag/command.
+gomoderate
+stdout '(?s)^NAME:.* gomoderate'
+
+gomoderate help
+stdout '(?s)^NAME:.* gomoderate'
+
+gomoderate -h
+stdout '(?s)^NAME:.* gomoderate'
+
+gomoderate --help
+stdout '(?s)^NAME:.* gomoderate'
+
+gomoderate help mute
+stdout '(?s)^NAME:.* gomoderate'
+
+gomoderate mute -h
+stdout '(?s)^NAME:.* gomoderate'
+
+gomoderate mute --help
+stdout '(?s)^NAME:.* gomoderate'
+
+# Confirm we get our shorter (perhaps less scary?) messages for common mistakes,
+# rather than a wall of text from urfave/cli.
+! gomoderate bad-command
+stderr 'Did you mean'
+stderr '(?s).*^error:.*^(examples|usage):.*^help:'
+
+! gomoderate mute bad-arg
+stderr 'Did you mean'
+stderr '(?s).*^error:.*^(examples|usage):.*^help:'
+
+! gomoderate mute users
+stderr 'at least one user'
+# stderr '(?s).*^error:.*^(examples|usage):.*^help:'
+
+# TODO: nicer bad flag message?
+# ! gomoderate mute --bad-flag
+# stderr '(?s).*^error:.*^(examples|usage):.*^help:'
+
+# Confirm some auth error messages, including when auth flags are supplied with the subcommand.
+# A successful use of our app key is in other testscript files (currently bluesky.txt)
+! gomoderate --my-user @nobody list mutes
+stderr '(?s)--app-key flag must be provided.*you can create an application key'
+
+! gomoderate --app-key xyz list mutes
+stderr '(?s)--my-user flag must be provided.*you can create an application key'
+
+! gomoderate list mutes --my-user @nobody
+stderr '(?s)--app-key flag must be provided.*you can create an application key'
+
+! gomoderate list mutes --app-key xyz
+stderr '(?s)--my-user flag must be provided.*you can create an application key'
+
+# Sorry @berduck, you are test blocked.
+# Note that list blocks does not require auth.
+gomoderate list blocks @thepudds.bsky.social
+stdout '^@berduck.deepfates.com$'
+
+# TODO: we should probably require --my-user value starts with @.
+# (Advanced users probably wouldn't mind us accepting both forms,
+# but less advanced users might be nudged in the right direction
+# more often when for example they might put the wrong arg in the wrong spot,
+# such as a "--my-user <some-app-key>").
