@@ -47,7 +47,7 @@ Go to [staging.bsky.app/settings/app-passwords](https://staging.bsky.app/setting
 Downloadable binary releases will be available eventually, but for now, to install gomoderate, make sure you have [Go](https://go.dev/dl/) installed on your system, then run:
 
 ```bash
-go install github.com/thepudds/gomoderate@latest
+go install github.com/thepudds/gomoderate@v0.3.0
 ```
 
 That will download & compile the source code. By default, it will install to the `go/bin` directory in your home directory.
