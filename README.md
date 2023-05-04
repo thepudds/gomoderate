@@ -134,7 +134,7 @@ gomoderate list blocks @user1.bsky.social
 
 ## trusted-unpleasant-user-list.txt
 
-gomoderate effectively defines a very simple file format defined that lists DIDs and handles, which can then be shared via URL or as files. 
+gomoderate effectively defines a very simple file format that lists DIDs and handles, which can then be shared via URL or as files. 
 
 One way to create such a file is via the --verbose flag:
 
