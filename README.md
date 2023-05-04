@@ -38,9 +38,9 @@ gomoderate [auth options] command subcommand [command options] [command argument
 
 But it is likely best understood by example, so we have included several [concrete examples](https://github.com/thepudds/gomoderate#examples) below.
 
-**Many of the commands require authentication** (though not all do). Before you can modify anything via gomoderate, you should obtain an application key from the Bluesky web interface. 
+**Many of the commands require authentication** (though not all do). Before you can modify anything via gomoderate, you need to get an application key.
 
-Go to [staging.bsky.app/settings/app-passwords](https://staging.bsky.app/settings/app-passwords) and create an application key. Your application key will look similar to `xj5s-fqo6-rtfm-lsrt`. (For brevity, we use `xyz` in the examples below).
+Go to [Settings](https://staging.bsky.app/settings) > [App Passwords](https://staging.bsky.app/settings/app-passwords) in the Bluesky web interface and create an application key, which will look similar to `xj5s-fqo6-rtfm-lsrt`. (For brevity, we use `xyz` in the examples below).
 
 ## Installation
 
@@ -68,16 +68,16 @@ Here are some more examples of how to use gomoderate:
 
 ### Mute users
 
-Mute one or more specified users:
-
-```bash
-gomoderate --my-user @me.bsky.social --app-key xyz mute users @user1.bsky.social @user2.bsky.social
-```
-
 Bulk muting of unpleasant accounts that were blocked by accounts you trust. Here, you trust the blocking decisions of `@trusted1` and `@trusted2` and apply their blocks to your account as mutes:
 
 ```bash
 gomoderate --my-user @me.bsky.social --app-key xyz mute from-user-blocks @trusted1.bsky.social @trusted2.bsky.social
+```
+
+Mute one or more specified users:
+
+```bash
+gomoderate --my-user @me.bsky.social --app-key xyz mute users @user1.bsky.social @user2.bsky.social
 ```
 
 Mute users from a list available via a URL:
