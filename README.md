@@ -139,7 +139,7 @@ gomoderate effectively defines a very simple file format defined that lists DIDs
 One way to create such a file is via the --verbose flag:
 
 ```
-gomoderate list blocks --verbose @user1.bsky.social > trusted-unpleasant-user-list.txt
+gomoderate list blocks --verbose @trusted-user-1.bsky.social > trusted-unpleasant-user-list.txt
 ```
 
 That file can be served from any web server, and then anyone in the world can:
